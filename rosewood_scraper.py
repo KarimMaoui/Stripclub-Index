@@ -6,7 +6,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
-LOCATION = "Rosewood Theater New York"
+LOCATION = "Rick's Cabaret New York"
 OUTPUT_CSV = "rosewood_populartimes.csv"
 FETCH_INTERVAL = 3600  # secondes (1 heure)
 
@@ -22,7 +22,7 @@ def fetch_popular_times():
     print(f"[{timestamp}] Récupération de l'affluence pour : {LOCATION}")
 
     # Aller directement sur la page Maps du Rosewood Theater
-    maps_url = "https://www.google.com/maps/place/Rosewood+Theater/@40.7542054,-73.9943727,17z"
+    maps_url = "https://www.google.com/maps/place/Rick's+Cabaret+New+York/@40.751251,-73.9904733,17z"
     driver.get(maps_url)
     time.sleep(5)
 
