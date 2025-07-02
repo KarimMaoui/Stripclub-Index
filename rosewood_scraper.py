@@ -3,34 +3,28 @@ import time
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
 LOCATION = "Rosewood Theater New York"
 OUTPUT_CSV = "rosewood_populartimes.csv"
 FETCH_INTERVAL = 3600  # secondes (1 heure)
 
+# Initialisation du driver
 options = Options()
 options.add_argument("--headless")
 options.add_argument("--window-size=1920,1080")
-driver = webdriver.Chrome(executable_path="./chromedriver", options=options)
+service = Service("./chromedriver")
+driver = webdriver.Chrome(service=service, options=options)
 
 def fetch_popular_times():
     timestamp = datetime.now().isoformat()
     print(f"[{timestamp}] Récupération de l'affluence pour : {LOCATION}")
 
-   # URL directe vers le Rosewood Theater sur Google Maps
-maps_url = "https://www.google.com/maps/place/Rosewood+Theater/@40.7542054,-73.9943727,17z"
-driver.get(maps_url)
-time.sleep(5)
-
-
-    try:
-        link = driver.find_element(By.XPATH, "//a[contains(@href,'/maps/place')]")
-        link.click()
-        time.sleep(5)
-    except Exception as e:
-        print("❌ Lien Google Maps non trouvé :", e)
-        return None
+    # Aller directement sur la page Maps du Rosewood Theater
+    maps_url = "https://www.google.com/maps/place/Rosewood+Theater/@40.7542054,-73.9943727,17z"
+    driver.get(maps_url)
+    time.sleep(5)
 
     try:
         blocks = driver.find_elements(By.XPATH, "//div[contains(@aria-label, 'Popular times') or contains(@aria-label, 'graph showing popular times')]")
@@ -51,7 +45,7 @@ def save_to_csv(record):
             writer.writerow([record["timestamp"], entry])
 
 if __name__ == "__main__":
-    # En-tête CSV
+    # En-tête CSV (création initiale)
     with open(OUTPUT_CSV, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["timestamp", "popular_times_label"])
@@ -60,8 +54,10 @@ if __name__ == "__main__":
     if record:
         save_to_csv(record)
 
+    # Boucle continue toutes les heures
     while True:
         time.sleep(FETCH_INTERVAL)
         record = fetch_popular_times()
         if record:
             save_to_csv(record)
+
