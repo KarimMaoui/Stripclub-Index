@@ -18,9 +18,11 @@ def fetch_popular_times():
     timestamp = datetime.now().isoformat()
     print(f"[{timestamp}] Récupération de l'affluence pour : {LOCATION}")
 
-    search_url = f"https://www.google.com/search?q={LOCATION}+site:google.com/maps"
-    driver.get(search_url)
-    time.sleep(5)
+   # URL directe vers le Rosewood Theater sur Google Maps
+maps_url = "https://www.google.com/maps/place/Rosewood+Theater/@40.7542054,-73.9943727,17z"
+driver.get(maps_url)
+time.sleep(5)
+
 
     try:
         link = driver.find_element(By.XPATH, "//a[contains(@href,'/maps/place')]")
