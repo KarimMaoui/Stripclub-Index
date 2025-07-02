@@ -12,7 +12,7 @@ FETCH_INTERVAL = 3600  # secondes (1 heure)
 options = Options()
 options.add_argument("--headless")
 options.add_argument("--window-size=1920,1080")
-driver = webdriver.Chrome(options=options)
+driver = webdriver.Chrome(executable_path="./chromedriver", options=options)
 
 def fetch_popular_times():
     timestamp = datetime.now().isoformat()
